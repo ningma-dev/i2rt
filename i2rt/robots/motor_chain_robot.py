@@ -393,7 +393,9 @@ class MotorChainRobot(Robot):
                     max(self._gripper_limits),
                 )
                 self._last_gripper_command_qpos = joint_commands.pos[self._gripper_index]
-            self._update_joint_state(motor_torques, joint_commands)
+        # Outside the state lock: set_commands waits for the CAN loop's bus exchange, and readers
+        # (get_observations, get_joint_pos) must not wait for the bus. Only this thread writes the state.
+        self._update_joint_state(motor_torques, joint_commands)
 
     def _update_joint_state(
         self,
@@ -421,7 +423,9 @@ class MotorChainRobot(Robot):
             kp=joint_commands.kp,
             kd=joint_commands.kd,
         )
-        self._joint_state = self._motor_state_to_joint_state(motor_state)
+        joint_state = self._motor_state_to_joint_state(motor_state)
+        with self._state_lock:
+            self._joint_state = joint_state
 
         with self._mcap_lock:
             if self._mcap_recorder is not None:
