@@ -93,5 +93,3 @@ i2rt.egg-info/
 scripts/temp_*/
 
 *.mjb
-# xpisode station examples write their Episodes here
-examples/xpisode/episodes/

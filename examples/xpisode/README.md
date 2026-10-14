@@ -38,7 +38,7 @@ The follower is i2rt's MuJoCo `SimRobot`; the leader is xpisode's fake handle, w
 and presses SYNC after a second, so the follower aligns and follows on its own. In another
 terminal (also from `../xpisode`): `uv run xpisode status --station yam_sim`,
 `uv run xpisode record start --station yam_sim --task demo`, `... record stop ...`,
-`... shutdown ...`. Episodes land in `examples/xpisode/episodes/`.
+`... shutdown ...`. Episodes land in `~/xpisode-data/yam_sim/episodes/`.
 
 ## On the arms
 
