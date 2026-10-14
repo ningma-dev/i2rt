@@ -26,7 +26,9 @@ git clone -b v2 git@github.com:ningma-dev/xpisode.git ../xpisode && (cd ../xpiso
 ```
 
 The `xpisode` extra pins xpisode's packages to one commit (`[tool.uv.sources]` in
-`pyproject.toml`). Its repository is private, so it needs GitHub SSH access.
+`pyproject.toml`). Its repository is private, so it needs GitHub SSH access. xpisode's station
+core is Rust: building it needs a toolchain ([rustup](https://rustup.rs); `cargo` on `PATH`
+while `uv sync` builds).
 
 ## Without hardware
 
@@ -66,6 +68,10 @@ What happens, in order:
 
 If anything misbehaves: release the leader, then Ctrl+C; the follower holds within 200 ms of
 the station losing control (its lease) and parks on shutdown. Pulling power drops the arms.
+
+If the station process itself dies (a crash, `kill -9`), the arms' processes stay: the
+follower holds, nothing is released. Running the station again adopts them instead of
+opening the buses a second time; press SYNC again to follow (control starts anew).
 
 Watch i2rt's own log lines: `Grav Comp Control Frequency` should stay well above 100 Hz
 (it warns below), and the motor chain reports steps longer than its expected period.
