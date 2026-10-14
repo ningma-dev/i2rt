@@ -1,5 +1,6 @@
 # The same station without hardware: the follower is i2rt's MuJoCo SimRobot, the leader
-# xpisode's fake handle, which sways and presses SYNC by itself after a second.
+# xpisode's fake handle, which sways and presses SYNC by itself after eight seconds,
+# once the teleop client has connected (a press nobody observes is lost).
 #
 #     uv run xpisode run <this i2rt checkout>/examples/xpisode/sim_station.toml
 
@@ -17,7 +18,7 @@ command = ["../../.venv/bin/xpisode-device", "run", "--station", "{station}", "-
 name = "leader"
 command = ["xpisode-device", "run", "--station", "{station}", "--name", "{name}",
            "--factory", "xpisode_device.fake:FakeLeader",
-           "--config", '{"motion": "wave", "press_sync_at_s": 1.0}']
+           "--config", '{"motion": "wave", "press_sync_at_s": 8.0}']
 
 [groups.arm]
 endpoints = ["follower/joint_position"]
