@@ -1,0 +1,30 @@
+# One YAM leader-follower pair as an xpisode station. Run from the xpisode checkout:
+#
+#     uv run xpisode run <this i2rt checkout>/examples/xpisode/yam_station.toml
+#
+# The arms run in this i2rt checkout's environment (`uv sync --extra xpisode`), the station
+# and the teleop client in xpisode's. Commands run in this directory.
+
+station = "yam"
+episodes = "episodes"
+control_hz = 100
+required_streams = ["/follower/state", "/leader/input"]
+record_button = { stream = "leader/input", field = "buttons", index = 1 }
+
+[[devices]]
+name = "follower"
+command = ["../../.venv/bin/xpisode-device", "run", "--station", "{station}", "--name", "{name}",
+           "--factory", "i2rt.xpisode:YamFollower", "--config", '{"channel": "can1"}']
+
+[[devices]]
+name = "leader"
+command = ["../../.venv/bin/xpisode-device", "run", "--station", "{station}", "--name", "{name}",
+           "--factory", "i2rt.xpisode:YamLeader", "--config", '{"channel": "can0"}']
+
+[groups.arm]
+endpoints = ["follower/joint_position"]
+holder = "teleop"
+
+[[clients]]
+name = "teleop"
+command = ["python", "-m", "xpisode_env.teleop", "--station", "{station}", "--config", "teleop.toml"]

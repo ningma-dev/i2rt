@@ -265,6 +265,16 @@ class SimRobot(Robot):
             mujoco.mj_forward(self._model, self._data)
             self._update_joint_state()
 
+    def move_joints(self, target_joint_positions: np.ndarray, time_interval_s: float = 2.0) -> None:
+        """Move to ``target_joint_positions`` along a straight line, as ``MotorChainRobot.move_joints`` does."""
+        current_pos = self.get_joint_pos()
+        assert len(current_pos) == len(target_joint_positions)
+        steps = 50
+        for i in range(steps + 1):
+            alpha = i / steps
+            self.command_joint_pos((1 - alpha) * current_pos + alpha * np.asarray(target_joint_positions))
+            time.sleep(time_interval_s / steps)
+
     def command_target_vel(self, joint_vel: np.ndarray) -> None:
         with self._lock:
             self._qvel = np.array(joint_vel, dtype=float)

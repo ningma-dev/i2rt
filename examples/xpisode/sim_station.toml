@@ -1,0 +1,28 @@
+# The same station without hardware: the follower is i2rt's MuJoCo SimRobot, the leader
+# xpisode's fake handle, which sways and presses SYNC by itself after a second.
+#
+#     uv run xpisode run <this i2rt checkout>/examples/xpisode/sim_station.toml
+
+station = "yam_sim"
+episodes = "episodes"
+control_hz = 100
+required_streams = ["/follower/state", "/leader/input"]
+
+[[devices]]
+name = "follower"
+command = ["../../.venv/bin/xpisode-device", "run", "--station", "{station}", "--name", "{name}",
+           "--factory", "i2rt.xpisode:YamFollower", "--config", '{"sim": true, "park_seconds": 0.5}']
+
+[[devices]]
+name = "leader"
+command = ["xpisode-device", "run", "--station", "{station}", "--name", "{name}",
+           "--factory", "xpisode_device.fake:FakeLeader",
+           "--config", '{"motion": "wave", "press_sync_at_s": 1.0}']
+
+[groups.arm]
+endpoints = ["follower/joint_position"]
+holder = "teleop"
+
+[[clients]]
+name = "teleop"
+command = ["python", "-m", "xpisode_env.teleop", "--station", "{station}", "--config", "teleop.toml"]

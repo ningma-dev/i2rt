@@ -493,6 +493,7 @@ class DMChainCanInterface(MotorChain):
         self.command_lock = threading.RLock()
 
         self.start_thread_flag = False
+        self._control_thread: Optional[threading.Thread] = None
         if start_thread:
             self.start_thread()
 
@@ -561,8 +562,8 @@ class DMChainCanInterface(MotorChain):
         if self.start_thread_flag:
             return
         logging.info("starting separate thread for control loop")
-        thread = threading.Thread(target=self._set_torques_and_update_state)
-        thread.start()
+        self._control_thread = threading.Thread(target=self._set_torques_and_update_state)
+        self._control_thread.start()
         self.start_thread_flag = True
         time.sleep(0.1)
         while self.state is None:
@@ -775,8 +776,19 @@ class DMChainCanInterface(MotorChain):
         with self.same_bus_device_lock:
             return self.same_bus_device_states
 
-    def close(self) -> None:
+    def close(self, timeout_s: float = 1.0) -> None:
+        """Stop the control loop, then close the bus.
+
+        The loop may be waiting on the socket when ``running`` clears; closing the socket under
+        it ends the loop with "file descriptor cannot be a negative integer (-1)". Waiting for
+        its current iteration to finish first sends nothing extra.
+        """
         self.running = False
+        thread = self._control_thread
+        if thread is not None and thread is not threading.current_thread():
+            thread.join(timeout=timeout_s)
+            if thread.is_alive():
+                logging.warning(f"{self}: control loop did not stop within {timeout_s} s; closing the bus anyway")
         self.motor_interface.close()
 
 
