@@ -591,7 +591,7 @@ requires-dist = [
     { name = "threadpoolctl", specifier = "==3.6.0" },
     { name = "tyro", specifier = ">=1.0.0" },
     { name = "viser", specifier = ">=0.2.0" },
-    { name = "xpisode-device", extras = ["iox"], marker = "extra == 'xpisode'", git = "ssh://git@github.com/ningma-dev/xpisode.git?subdirectory=packages%2Fxpisode-device&rev=f4025d6cbc64fd47fd871053ae0f169be9bab4c7" },
+    { name = "xpisode-device", extras = ["iox"], marker = "extra == 'xpisode'", git = "ssh://git@github.com/ningma-dev/xpisode.git?subdirectory=packages%2Fxpisode-device&rev=56a860a131ff51743319d68d2f545b51e04872f2" },
 ]
 provides-extras = ["dev", "xpisode"]
 
@@ -2224,7 +2224,7 @@ wheels = [
 [[package]]
 name = "xpisode-device"
 version = "0.1.0.dev0"
-source = { git = "ssh://git@github.com/ningma-dev/xpisode.git?subdirectory=packages%2Fxpisode-device&rev=f4025d6cbc64fd47fd871053ae0f169be9bab4c7#f4025d6cbc64fd47fd871053ae0f169be9bab4c7" }
+source = { git = "ssh://git@github.com/ningma-dev/xpisode.git?subdirectory=packages%2Fxpisode-device&rev=56a860a131ff51743319d68d2f545b51e04872f2#56a860a131ff51743319d68d2f545b51e04872f2" }
 dependencies = [
     { name = "numpy" },
     { name = "pydantic" },
@@ -2239,7 +2239,7 @@ iox = [
 [[package]]
 name = "xpisode-format"
 version = "0.1.0.dev0"
-source = { git = "ssh://git@github.com/ningma-dev/xpisode.git?subdirectory=packages%2Fxpisode-format&rev=f4025d6cbc64fd47fd871053ae0f169be9bab4c7#f4025d6cbc64fd47fd871053ae0f169be9bab4c7" }
+source = { git = "ssh://git@github.com/ningma-dev/xpisode.git?subdirectory=packages%2Fxpisode-format&rev=56a860a131ff51743319d68d2f545b51e04872f2#56a860a131ff51743319d68d2f545b51e04872f2" }
 dependencies = [
     { name = "mcap" },
     { name = "numpy" },
