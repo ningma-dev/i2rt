@@ -216,7 +216,8 @@ class YamFollower(_Yam):
 
     def halt(self, resource: str) -> None:
         """Hold still where the arm is now."""
-        self.robot.command_joint_pos(self.robot.get_joint_pos())
+        # A copy: MotorChainRobot returns its live state array, and command_joint_pos clips in place.
+        self.robot.command_joint_pos(np.array(self.robot.get_joint_pos(), dtype=np.float64))
 
 
 class YamLeader(_Yam):

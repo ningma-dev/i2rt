@@ -54,6 +54,9 @@ def test_the_follower_tracks_targets_and_parks_where_it_started() -> None:
     follower.run("park")
     np.testing.assert_allclose(robot.get_joint_pos()[:6], 0.0, atol=1e-9)
     np.testing.assert_allclose(robot.get_joint_pos()[6], 0.2)  # the gripper stays
+    held = robot.get_joint_pos()
+    follower.halt("arm")
+    np.testing.assert_allclose(robot.get_joint_pos(), held)
     info = follower.describe()
     assert info.device["sim"] is True
     assert info.device["park_joints"] == [0.0] * 6
