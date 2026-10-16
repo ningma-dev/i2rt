@@ -43,20 +43,12 @@ dev = [
     "pytest-xdist>=3.8.0",
     "ruff>=0.15.6",
 ]
-# Run YAM arms as xpisode device peers (i2rt/xpisode).
-xpisode = ["xpisode-device[iox]"]
 
 [tool.uv]
 # ruckig 0.15.3 publishes only an sdist, so it is compiled from source on a fresh
 # install (e.g. CI). Its build fails under scikit-build-core >= 0.10, which rejects the
 # package's deprecated `cmake.targets`. Pin the build backend below that so it builds.
 build-constraint-dependencies = ["scikit-build-core<0.10"]
-
-[tool.uv.sources]
-# xpisode is not on PyPI (and its repository is private: SSH access needed); both packages
-# come from one pinned commit of it.
-xpisode-device = { git = "ssh://git@github.com/ningma-dev/xpisode.git", subdirectory = "packages/xpisode-device", rev = "aa8a968f1d877784b65a2291780e0f125a3d7beb" }
-xpisode-format = { git = "ssh://git@github.com/ningma-dev/xpisode.git", subdirectory = "packages/xpisode-format", rev = "aa8a968f1d877784b65a2291780e0f125a3d7beb" }
 
 [tool.flit.module]
 name = "i2rt"
